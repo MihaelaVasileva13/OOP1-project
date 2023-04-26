@@ -1,9 +1,8 @@
 package bg.tu_varna.sit.a1.f21621531;
 
-import bg.tu_varna.sit.a1.f21621531.options.Options;
-import bg.tu_varna.sit.a1.f21621531.options.XMLParserOptions;
+import bg.tu_varna.sit.a1.f21621531.options.GeneralMenu;
+import bg.tu_varna.sit.a1.f21621531.options.Menu;
 import java.util.Scanner;
-
 public class XMLParser {
     private static XMLParser instance;
 
@@ -14,15 +13,14 @@ public class XMLParser {
         }
         return instance;
     }
-
-    public void start(){
-        Options allOptions=new XMLParserOptions();
+    public void launch(){
+        Menu menu=new GeneralMenu();
         Scanner scanner=new Scanner(System.in);
         String input;
         String[] options;
         while (true)
         {
-            System.out.print("\n> ");
+            System.out.print("> ");
             input=scanner.nextLine();
             if (input.equals("exit"))
             {
@@ -31,7 +29,7 @@ public class XMLParser {
             }
             options=input.split(" ");
             try {
-                allOptions.start(options);
+                menu.execute(options);
             } catch (Exception e){
                 System.out.println(e.getMessage());
             }

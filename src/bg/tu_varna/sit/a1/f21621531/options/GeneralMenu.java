@@ -2,14 +2,15 @@ package bg.tu_varna.sit.a1.f21621531.options;
 
 import java.io.*;
 
-public class XMLParserOptions implements Options{
+public class GeneralMenu implements Menu,OpenOption,SaveOption,SaveAsOption,HelpOption,CloseOption{
     private String fileName;
     private String fileContent;
     private boolean fileOpened=false;
-    public XMLParserOptions() {
+    public GeneralMenu() {
         fileName = null;
     }
-    public void start(String[] options) throws IOException {
+    @Override
+    public void execute(String[] options) throws IOException {
         try {
             switch (options[0]) {
                 case "open" -> open(options);
@@ -22,11 +23,14 @@ public class XMLParserOptions implements Options{
         }catch (InvalidOptionException e){
             System.out.println(e.getMessage());
         }
-
     }
-
-    private void readFile(String fileToBeRead){
-        try (BufferedReader reader = new BufferedReader(new FileReader(fileToBeRead))) {
+    @Override
+    public void open(String[] option) throws InvalidOptionException {
+        if (option.length != 2 || option[1].isEmpty()) {
+            throw new InvalidOptionException("Invalid arguments for option open");
+        }
+        fileName= option[1];
+        try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
             StringBuilder sb = new StringBuilder();
             String line = reader.readLine();
             while (line != null) {
@@ -38,38 +42,24 @@ public class XMLParserOptions implements Options{
         } catch (IOException e) {
             System.out.println("Unable to read file.");
         }
-    }
-    private void open(String[] option) throws InvalidOptionException {
-        if (option.length != 2 || option[1].isEmpty()) {
-            throw new InvalidOptionException("Invalid arguments for option open");
-        }
-        fileName= option[1];
-        readFile(fileName);
         fileOpened=true;
         System.out.println("Successfully opened " + fileName);
     }
-    private void close() throws InvalidOptionException {
+    @Override
+    public void save() throws InvalidOptionException {
         if (!fileOpened) {
             throw new InvalidOptionException("No file is currently open.");
         }
-        System.out.println("Successfully closed "+fileName);
-        fileName=null;
-        fileContent=null;
-        fileOpened=false;
-    }
-    private void save() throws InvalidOptionException{
-        if (!fileOpened) {
-            throw new InvalidOptionException("No file is currently open.");
-        }
-        readFile(fileName);
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName))) {
             writer.write(fileContent);
             System.out.println("Successfully saved " + fileName);
         } catch (IOException e) {
             System.out.println("Unable to save file.");
         }
+
     }
-    private void saveAs(String[] option) throws InvalidOptionException, IOException {
+    @Override
+    public void saveAs(String[] option) throws InvalidOptionException, IOException {
         if (option.length != 2 || option[1].isEmpty()) {
             throw new InvalidOptionException("Invalid arguments for option saveas");
         }
@@ -81,7 +71,6 @@ public class XMLParserOptions implements Options{
         if(!newFile.createNewFile()){
             System.out.println("Unable to create file.");
         }
-        readFile(fileName);
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(newFile))) {
             writer.write(fileContent);
             System.out.println("Successfully saved " + newFileName);
@@ -89,7 +78,8 @@ public class XMLParserOptions implements Options{
             System.out.println("Unable to save file.");
         }
     }
-    private void help(){
+    @Override
+    public void help() {
         String optionInfo= """
                 The following commands are supported:\s
                 open <file> opens <file>\s
@@ -99,5 +89,15 @@ public class XMLParserOptions implements Options{
                 help prints this information\s
                 exit exists the program\s""";
         System.out.println(optionInfo);
+    }
+    @Override
+    public void close() throws InvalidOptionException {
+        if (!fileOpened) {
+            throw new InvalidOptionException("No file is currently open.");
+        }
+        System.out.println("Successfully closed "+fileName);
+        fileName=null;
+        fileContent=null;
+        fileOpened=false;
     }
 }
