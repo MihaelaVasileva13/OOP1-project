@@ -1,11 +1,12 @@
 package bg.tu_varna.sit.a1.f21621531;
 
-import bg.tu_varna.sit.a1.f21621531.options.GeneralMenu;
-import bg.tu_varna.sit.a1.f21621531.options.Menu;
+import bg.tu_varna.sit.a1.f21621531.menu.GeneralMenu;
+import bg.tu_varna.sit.a1.f21621531.menu.Menu;
+
 import java.util.Scanner;
+
 public class XMLParser {
     private static XMLParser instance;
-
     public static XMLParser getInstance()
     {
         if (instance==null){
@@ -17,7 +18,7 @@ public class XMLParser {
         Menu menu=new GeneralMenu();
         Scanner scanner=new Scanner(System.in);
         String input;
-        String[] options;
+        String[] command;
         while (true)
         {
             System.out.print("> ");
@@ -27,9 +28,9 @@ public class XMLParser {
                 System.out.println("Exiting the program... ");
                 System.exit(1);
             }
-            options=input.split(" ");
+            command=input.split(" ");
             try {
-                menu.execute(options);
+                menu.execute(command);
             } catch (Exception e){
                 System.out.println(e.getMessage());
             }
