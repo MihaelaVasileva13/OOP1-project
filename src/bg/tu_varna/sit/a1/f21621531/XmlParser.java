@@ -5,12 +5,12 @@ import bg.tu_varna.sit.a1.f21621531.menu.Menu;
 
 import java.util.Scanner;
 
-public class XMLParser {
-    private static XMLParser instance;
-    public static XMLParser getInstance()
+public class XmlParser {
+    private static XmlParser instance;
+    public static XmlParser getInstance()
     {
         if (instance==null){
-            instance=new XMLParser();
+            instance=new XmlParser();
         }
         return instance;
     }
