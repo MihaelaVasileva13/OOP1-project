@@ -5,111 +5,184 @@ import bg.tu_varna.sit.a1.f21621531.XmlElement;
 import bg.tu_varna.sit.a1.f21621531.XmlFile;
 
 import java.io.IOException;
-
 public class XPath implements Command {
     private XmlFile xmlFile;
-
     @Override
     public void setXmlFile(XmlFile xmlFile) {
         this.xmlFile = xmlFile;
     }
-
     @Override
     public XmlFile getXmlFile() {
         return this.xmlFile;
     }
-
     @Override
     public String execute(String[] command) throws IOException, XMLParserException {
         if (command.length != 2 || command[1].isEmpty()) {
-            throw new XMLParserException("Invalid arguments for command xpath <XPath>!");
+            throw new XMLParserException("Invalid arguments for command xPath <xPath>!");
         }
-        String xpath = command[1];
+        String xPath = command[1];
         StringBuilder list = new StringBuilder();
-
-        list = new StringBuilder(getChildElementsByAttribute(xpath, list));
-
+        if (xPath.contains("/")) {
+            if (xPath.contains("[") && xPath.contains("]")) {
+                list = new StringBuilder(getChildElementByIndex(xPath, list));
+            } else {
+                if (xPath.contains("@")) {
+                    list = new StringBuilder(getAllElementIds(xPath, list));
+                } else {
+                    list = new StringBuilder(getAllChildElements(xPath, list));
+                }
+            }
+        } else if (xPath.contains("=") && xPath.contains("(") && xPath.contains(")") && xPath.contains("\"") && xPath.contains("/")) {
+            list = new StringBuilder(getChildElementsByAttribute(xPath, list));
+        } else {
+            throw new XMLParserException("Invalid XPath operation!");
+        }
         return list.toString();
     }
-
-    private String getAllChildElements(String xpath, StringBuilder list) {
-        String[] xpathParts = xpath.split("/");
-        if (xpathParts.length >= 2) {
-            String parentName = xpathParts[0];
-            String childName = xpathParts[1];
+    private String getAllChildElements(String xPath, StringBuilder list) throws XMLParserException {
+        String[] xPathParts = xPath.split("/");
+        if (xPathParts.length == 2) {
+            String parentName = xPathParts[0];
+            String childName = xPathParts[1];
+            StringBuilder elements=new StringBuilder();
             list.append("List of all ").append(childName).append("'s:\n");
             if (xmlFile.getElementByName(parentName) != null) {
                 for (XmlElement element : xmlFile.getAllElements()) {
                     if (element.getName().equals(parentName)) {
-                        for (XmlElement child : element.getChildren()) {
-                            if (child.getName().equals(childName)) {
-                                list.append("- ").append(child.getText()).append("\n");
+                        if (!element.getChildren().isEmpty()) {
+                            for (XmlElement child : element.getChildren()) {
+                                if (child.getName().equals(childName)) {
+                                    elements.append("- ").append(child.getText()).append("\n");
+                                }
                             }
+                        }
+                        else
+                        {
+                            throw new XMLParserException("The parent element does not have any children!");
                         }
                     }
                 }
             }
+            else
+            {
+                throw new XMLParserException("There is not a parent element "+parentName+"!");
+            }
+            if (elements.isEmpty())
+            {
+                throw new XMLParserException("There is not a child element "+childName+"!");
+            }
+            else
+            {
+                list.append(elements);
+            }
+        }
+        else
+        {
+            throw new XMLParserException("Invalid XPath operation!");
         }
         return list.toString();
     }
 
-    private String getChildElementByIndex(String xpath, StringBuilder list) {
-        String[] xpathParts = xpath.split("/");
-        if (xpathParts.length >= 2) {
-            String parentName = xpathParts[0];
-            int openingBracketIndex = xpath.indexOf('[');
-            int closingBracketIndex = xpath.indexOf(']');
-            int index = Integer.parseInt(xpath.substring(openingBracketIndex + 1, closingBracketIndex));
+    private String getChildElementByIndex(String xPath, StringBuilder list) throws XMLParserException {
+        String[] xPathParts = xPath.split("\\W+");
+        if (xPathParts.length == 3) {
+            StringBuilder elements=new StringBuilder();
+            String parentName = xPathParts[0];
+            String childName = xPathParts[1];
+            int index = Integer.parseInt(xPathParts[2]);
             int numberOfChild = 0;
-            String childName = xpath.substring(xpath.indexOf("/") + 1, openingBracketIndex);
-            list.append("Index :").append(index);
             list.append("List of the ").append(index + 1).append(" ").append(childName).append(" of ").append(parentName).append(":\n");
             if (xmlFile.getElementByName(parentName) != null) {
                 for (XmlElement element : xmlFile.getAllElements()) {
                     if (element.getName().equals(parentName)) {
-                        for (XmlElement child : element.getChildren()) {
-                            if (child.getName().equals(childName)) {
-                                if (numberOfChild == index) {
-                                    list.append("- ").append(child.getText()).append("\n");
+                        if (!element.getChildren().isEmpty()) {
+                            for (XmlElement child : element.getChildren()) {
+                                if (child.getName().equals(childName)) {
+                                    if (numberOfChild == index) {
+                                        elements.append("- ").append(child.getText()).append("\n");
+                                    }
+                                    numberOfChild++;
                                 }
-                                numberOfChild++;
+                            }
+                        }
+                        else
+                        {
+                            throw new XMLParserException("The parent element does not have any children!");
+                        }
+                    }
+                }
+            }
+            else
+            {
+                throw new XMLParserException("There is not a parent element "+parentName+"!");
+            }
+            if (elements.isEmpty())
+            {
+                throw new XMLParserException("There is not a child element "+childName+" with index "+index+"!");
+            }
+            else
+            {
+                list.append(elements);
+            }
+        }
+        else
+        {
+            throw new XMLParserException("Invalid XPath operation!");
+        }
+        return list.toString();
+    }
+
+    private String getAllElementIds(String xPath, StringBuilder list) throws XMLParserException {
+        String[] xPathParts =xPath.split("\\(@|\\)");
+        if (xPathParts.length == 2) {
+            StringBuilder elements=new StringBuilder();
+            String elementName = xPathParts[0];
+            String attributeName = xPathParts[1];
+            list.append("List of all ").append(attributeName).append("'s:\n");
+            if (xmlFile.getElementByName(elementName) != null) {
+                for (XmlElement element : xmlFile.getAllElements()) {
+                    if (element.getName().equals(elementName)) {
+                        if (!element.getAttributes().isEmpty()){
+                            for (String key : element.getAttributes().keySet()) {
+                                if (key.equals(attributeName))
+                                {
+                                    elements.append("- ").append(element.getAttributes().get(key)).append("\n");
+                                }
                             }
                         }
                     }
                 }
             }
-        }
-        return list.toString();
-    }
-
-    private String getAllElementIds(String xpath, StringBuilder list) {
-        int openingParenIndex = xpath.indexOf('(');
-        int closingParenIndex = xpath.indexOf(')');
-        if (openingParenIndex != -1 && closingParenIndex != -1) {
-            String elementName = xpath.substring(0, openingParenIndex);
-            String attributeName = xpath.substring(openingParenIndex + 1, closingParenIndex);
-            list.append("List of all ").append(attributeName).append("'s:\n");
-            if (xmlFile.getElementByName(elementName) != null) {
-                for (XmlElement element : xmlFile.getAllElements()) {
-                    if (element.getName().equals(elementName)) {
-                        list.append("- ").append(element.getId()).append("\n");
-
-                    }
-                }
+            else
+            {
+                throw new XMLParserException("There is not element "+elementName+"!");
+            }
+            if (elements.isEmpty())
+            {
+                throw new XMLParserException("There is not attribute "+attributeName+"!");
+            }
+            else
+            {
+                list.append(elements);
             }
         }
+        else
+        {
+            throw new XMLParserException("Invalid XPath operation!");
+        }
         return list.toString();
     }
-    private String getChildElementsByAttribute(String xpath, StringBuilder list) {
-        String[] xpathParts = xpath.split("/");
-        xpath = xpath.replaceAll("\"", "");
-        if (xpathParts.length >= 2) {
-            String parentName = xpath.substring(0, xpath.indexOf('('));
-            String childName = xpath.substring(xpath.indexOf('(') + 1, xpath.indexOf('='));
-            String childName1 = xpathParts[1];
-            String text = xpath.substring(xpath.indexOf('=') + 1, xpath.indexOf(')'));
-            list.append("List of all ").append(childName1).append("'s of elements ").append(parentName).append(" with ").append(childName).append(" ").append(text).append(":\n");
 
+    private String getChildElementsByAttribute(String xPath, StringBuilder list) throws XMLParserException {
+        String[] xPathParts = xPath.split("\\W+");
+        if (xPathParts.length == 4) {
+            StringBuilder elements=new StringBuilder();
+            String parentName = xPathParts[0];
+            String childName = xPathParts[1];
+            String text = xPathParts[2];
+            String childName1 = xPathParts[3];
+            System.out.println(parentName+" "+childName+" "+childName1+" "+text);
+            list.append("List of all ").append(childName1).append("'s of elements ").append(parentName).append(" with ").append(childName).append(" ").append(text).append(":\n");
             if (xmlFile.getElementByName(parentName) != null) {
                 for (XmlElement element : xmlFile.getAllElements()) {
                     if (element.getName().equals(parentName)) {
@@ -117,13 +190,30 @@ public class XPath implements Command {
                         {
                             for (XmlElement child : element.getChildren()) {
                                 if (child.getName().equals(childName1)) {
-                                    list.append("- ").append(child.getText()).append("\n");
+                                    elements.append("- ").append(child.getText()).append("\n");
                                 }
                             }
                         }
                     }
                 }
             }
+            else
+            {
+                throw new XMLParserException("There is not parent element "+parentName+"!");
+            }
+            if (elements.isEmpty())
+            {
+                throw new XMLParserException("There is not a child element "+childName+"!");
+            }
+            else {
+
+                list.append(elements);
+            }
+
+        }
+        else
+        {
+            throw new XMLParserException("Invalid XPath operation!");
         }
         return list.toString();
     }
