@@ -4,30 +4,37 @@ import bg.tu_varna.sit.a1.f21621531.XMLParserException;
 import bg.tu_varna.sit.a1.f21621531.XmlElement;
 import bg.tu_varna.sit.a1.f21621531.XmlFile;
 
-import java.io.IOException;
-public class Select implements Command{
-    private final XmlFile xmlFile;
-    private final String id;
-    private final String key;
-
-    public Select(XmlFile xmlFile,String id,String key) {
+public class Select implements Command {
+    private XmlFile xmlFile;
+    @Override
+    public void setXmlFile(XmlFile xmlFile) {
         this.xmlFile = xmlFile;
-        this.id=id;
-        this.key=key;
     }
     @Override
-    public void execute() throws IOException, XMLParserException {
-        String value=null;
-        for (XmlElement element:xmlFile.getAllElements()) {
-            for (String key1 : element.getAttributes().keySet()) {
-                if (element.getId().contains(id)&& key1.equals(key)) {
-                    value = element.getAttributes().get(key).replaceAll("\"", "");
-                }
+    public XmlFile getXmlFile() {
+        return this.xmlFile;
+    }
+    @Override
+    public String execute(String[] command) throws XMLParserException {
+        if (command.length != 3|| command[1].isEmpty()|| command[2].isEmpty()) {
+            throw new XMLParserException("Invalid arguments for command select <id> <key>!");
+        }
+        String id=command[1];
+        String key=command[2];
+        String value = null;
+        XmlElement element = xmlFile.getElementById(id);
+        if (element == null) {
+            throw new XMLParserException("No element found with the given id!");
+        }
+        for (String key1 : element.getAttributes().keySet()) {
+            if (element.getId().contains(id) && key1.equals(key)) {
+                value = element.getAttributes().get(key).replaceAll("\"", "");
+                break;
             }
         }
         if (value == null || value.isEmpty()) {
-            throw new XMLParserException("There is no such attribute or id!");
+            throw new XMLParserException("The element with id "+id+" does not have the required attribute!");
         }
-        System.out.println("The attribute value is: "+value);
+        return ("The attribute value of the element with id "+id+" is: " + value);
     }
 }

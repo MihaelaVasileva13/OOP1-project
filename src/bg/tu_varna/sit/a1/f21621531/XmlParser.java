@@ -14,7 +14,7 @@ public class XmlParser {
         }
         return instance;
     }
-    public void launch(){
+    public void launch() throws XMLParserException {
         Menu menu=new GeneralMenu();
         Scanner scanner=new Scanner(System.in);
         String input;
@@ -26,7 +26,7 @@ public class XmlParser {
             if (input.equals("exit"))
             {
                 System.out.println("Exiting the program... ");
-                System.exit(1);
+                System.exit(0);
             }
             command=input.split(" ");
             try {

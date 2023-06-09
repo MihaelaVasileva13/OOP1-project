@@ -1,10 +1,14 @@
 <people>
-	<person id="0" age="30">
+	<person id="0" age="45">
 		<name id="0_1">John Smith</name>
 		<address id="0_2">USA</address>
+		<address id="1_1">Alaska</address>
+		<address id="1_1_3">Nebraska</address>
 	</person>
 	<person id="1">
 		<name id="3">Ivan Petrov</name>
-		<address id="1_1">Bulgaria</address>
+		<address id="1_1_4">Bulgaria</address>
+		<address id="1_1_7">Italy</address>
+		<address id="1_1_8">USA</address>
 	</person>
 </people>

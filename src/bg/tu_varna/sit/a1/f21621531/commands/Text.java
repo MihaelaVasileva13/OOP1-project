@@ -3,37 +3,31 @@ package bg.tu_varna.sit.a1.f21621531.commands;
 import bg.tu_varna.sit.a1.f21621531.XMLParserException;
 import bg.tu_varna.sit.a1.f21621531.XmlElement;
 import bg.tu_varna.sit.a1.f21621531.XmlFile;
-
-import java.io.IOException;
-
 public class Text implements Command {
-    private final XmlFile xmlFile;
-    private final String id;
-
-    public Text(XmlFile xmlFile, String id) {
-        this.xmlFile = xmlFile;
-        this.id = id;
-    }
-
+    private XmlFile xmlFile;
     @Override
-    public void execute() throws IOException, XMLParserException {
-        boolean flag = false;
-        String text =null;
-        for (XmlElement element : xmlFile.getAllElements()) {
-            if (element.getId().equals(id)) {
-                text=element.getText();
-                flag=true;
-            }
+    public void setXmlFile(XmlFile xmlFile) {
+        this.xmlFile = xmlFile;
+    }
+    @Override
+    public XmlFile getXmlFile() {
+        return this.xmlFile;
+    }
+    @Override
+    public String execute(String[] command) throws XMLParserException {
+        if (command.length != 2|| command[1].isEmpty()) {
+            throw new XMLParserException("Invalid arguments for command text <id>!");
         }
-        if(!flag) {
-            throw new XMLParserException("There is no such id!");
+        String id=command[1];
+        String text;
+        XmlElement element = xmlFile.getElementById(id);
+        if (element == null) {
+            throw new XMLParserException("No element found with the given id!");
         }
-        if (text!=null&&!text.isEmpty()) {
-            System.out.println("The text of the element with id " + id + " is: " + text);
-        }
-        else
-        {
+        text = element.getText();
+        if (text == null || text.isEmpty()) {
             throw new XMLParserException("This element does not have text!");
         }
+        return "The text of the element with id " + id + " is: " + text;
     }
 }
