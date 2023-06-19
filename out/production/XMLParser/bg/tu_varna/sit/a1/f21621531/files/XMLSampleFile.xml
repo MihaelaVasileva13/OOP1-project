@@ -1,0 +1,10 @@
+<people>
+	<person id="0" age="45">
+		<name id="0_1">John Smith</name>
+		<address id="0_2">USA</address>
+	</person>
+	<person id="0">
+		<name>Ivan Petrov</name>
+		<address id="1_1">Bulgaria</address>
+	</person>
+</people>

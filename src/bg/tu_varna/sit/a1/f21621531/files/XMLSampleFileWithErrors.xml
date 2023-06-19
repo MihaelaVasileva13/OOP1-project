@@ -1,0 +1,10 @@
+<people>
+	<<person age="25">
+		<name id="0_1">John Smith</name>
+	    <address id="0_2">USA</address>
+	</person>
+	<person id="0" age="45">
+		<name>Ivan Ivanov</name>
+		<address id="0_2">Bulgaria</address>
+	</person>
+</people>
