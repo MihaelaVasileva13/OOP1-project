@@ -26,27 +26,26 @@ public class Open implements XmlFileAwareCommand {
                 throw new XMLParserException("Invalid arguments for command open <file>!");
             }
             Path path = Path.of(command[1]);
-            String filePath = command[1];
+            String filePath = path.toString();
             String fileName = path.getFileName().toString();
             try {
                 if (!Files.exists(path)) {
                     Files.createFile(path);
-                    if (Files.exists(path)) {
-                        return ("File created successfully!");
-                    } else {
+                    if (!Files.exists(path)) {
                         throw new IOException("File creation failed!");
                     }
                 }
                 try (BufferedReader reader = Files.newBufferedReader(path)) {
-                    StringBuilder sb = new StringBuilder();
+                    StringBuilder fileContent = new StringBuilder();
                     String line = reader.readLine();
                     while (line != null) {
-                        sb.append(line);
-                        sb.append(System.lineSeparator());
+                        fileContent.append(line);
+                        fileContent.append(System.lineSeparator());
                         line = reader.readLine();
                     }
-                    xmlDataExtractor.extract(sb.toString());
-                    this.xmlFile = new XmlFile(xmlDataExtractor.getRootElement(), fileName, filePath,true, xmlDataExtractor.getAllElements(), xmlDataExtractor.getIdValidator());
+                    xmlDataExtractor.extract(fileContent.toString());
+                    System.out.println(filePath+" "+fileName);
+                    xmlFile = new XmlFile(xmlDataExtractor.getRootElement(), fileName, filePath,true, xmlDataExtractor.getAllElements(), xmlDataExtractor.getIdValidator());
                 }
             } catch (IOException e) {
                 return "Unable to read the file: " + e.getMessage();

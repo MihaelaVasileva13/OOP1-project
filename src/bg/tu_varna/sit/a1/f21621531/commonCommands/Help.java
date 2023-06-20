@@ -1,9 +1,7 @@
 package bg.tu_varna.sit.a1.f21621531.commonCommands;
 
 import bg.tu_varna.sit.a1.f21621531.xmlParser.XMLParserException;
-import bg.tu_varna.sit.a1.f21621531.xmlParser.XmlFile;
 public class Help implements Command {
-    private XmlFile xmlFile;
     @Override
     public String execute(String[] command) throws XMLParserException {
         if (command.length != 1) {
@@ -25,7 +23,7 @@ public class Help implements Command {
             child <id> <n>         access the n-th descendant of an element
             text <id>              access the text of an element
             delete <id> <key>      delete element attribute by key
-            newchild <id>          adding a new element successor (the new item does not have any attributes except id)
+            newchild <id> <name>   adding a new element successor (the new item does not have any attributes except id)
             """;
     }
 }

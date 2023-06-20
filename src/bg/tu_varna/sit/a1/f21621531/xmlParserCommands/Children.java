@@ -34,7 +34,7 @@ public class Children implements XmlFileAwareCommand {
                 for (String attribute : child.getAttributes().keySet()) {
                     if (!attribute.contains("id"))
                     {
-                        attributeList.append(attribute).append(" ");
+                        attributeList.append("-").append(attribute).append("\n");
                     }
                 }
             }

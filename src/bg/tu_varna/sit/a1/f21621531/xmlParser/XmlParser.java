@@ -33,6 +33,8 @@ public class XmlParser {
                 menu.execute(command);
             } catch (Exception e){
                 System.out.println(e.getMessage());
+                System.out.println("Exiting the program... ");
+                System.exit(0);
             }
         }
     }

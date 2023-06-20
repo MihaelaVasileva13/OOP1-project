@@ -2,8 +2,6 @@ package bg.tu_varna.sit.a1.f21621531.commonCommands;
 
 import bg.tu_varna.sit.a1.f21621531.xmlParser.XmlFile;
 import bg.tu_varna.sit.a1.f21621531.xmlParser.XMLParserException;
-import bg.tu_varna.sit.a1.f21621531.xmlParserCommands.Print;
-
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -24,8 +22,6 @@ public class SaveAs implements XmlFileAwareCommand {
             throw new XMLParserException("Invalid arguments for command saveas <file>!");
         }
         String newFilePath = command[1];
-        Print print = new Print();
-        print.setXmlFile(xmlFile);
         try {
             File newFile = new File(newFilePath);
             String fileName = newFile.getName();
@@ -33,7 +29,7 @@ public class SaveAs implements XmlFileAwareCommand {
                 return ("Unable to create file!");
             }
             try (BufferedWriter writer = new BufferedWriter(new FileWriter(newFile))) {
-                writer.write(print.toText());
+                writer.write(xmlFile.toText());
             } catch (IOException e) {
                 return ("Unable to save file!");
             }

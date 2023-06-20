@@ -18,11 +18,11 @@ public class Delete implements XmlFileAwareCommand {
     @Override
     public String execute(String[] command) throws XMLParserException {
         if (command.length != 3|| command[1].isEmpty()|| command[2].isEmpty()) {
-            throw new XMLParserException("Invalid arguments for command delete!");
+            throw new XMLParserException("Invalid arguments for command delete <id> <key>!");
         }
         String id = command[1];
         String key = command[2];
-        boolean flag = false;
+        boolean attributeFound = false;
         String result = null;
         XmlElement element = xmlFile.getElementById(id);
         if (element == null) {
@@ -32,14 +32,14 @@ public class Delete implements XmlFileAwareCommand {
             if(!key.equals("id")) {
                 element.getAttributes().remove(key);
                 result = "The attribute " + key + " of the element with id " + id + " removed.";
-                flag = true;
+                attributeFound = true;
             }
             else
             {
                 throw new XMLParserException("The id can not be deleted!");
             }
         }
-        if (!flag) {
+        if (!attributeFound) {
             throw new XMLParserException("No attribute found with the given key!");
         }
         return result;
