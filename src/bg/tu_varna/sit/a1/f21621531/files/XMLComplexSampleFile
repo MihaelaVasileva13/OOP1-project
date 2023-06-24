@@ -1,4 +1,4 @@
-<people>
+<people category="employees">
 	<person id="0" age="33">
 		<name id="0_1" title="Mr.">John Smith</name>
 		<address id="0_2" type="home">

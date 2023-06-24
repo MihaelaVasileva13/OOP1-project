@@ -3,6 +3,7 @@ package bg.tu_varna.sit.a1.f21621531.commonCommands;
 import bg.tu_varna.sit.a1.f21621531.xmlParser.XMLParserException;
 import bg.tu_varna.sit.a1.f21621531.xmlParser.XmlFile;
 import bg.tu_varna.sit.a1.f21621531.xmlParserComponents.XmlDataExtractor;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -10,7 +11,7 @@ import java.nio.file.Path;
 
 public class Open implements XmlFileAwareCommand {
     private XmlFile xmlFile;
-    private final XmlDataExtractor xmlDataExtractor = new XmlDataExtractor();
+
     @Override
     public void setXmlFile(XmlFile xmlFile) {
         this.xmlFile = xmlFile;
@@ -44,6 +45,10 @@ public class Open implements XmlFileAwareCommand {
                     fileContent.append(System.lineSeparator());
                     line = reader.readLine();
                 }
+                if (fileContent.isEmpty()) {
+                    throw new XMLParserException("The file is empty!");
+                }
+                XmlDataExtractor xmlDataExtractor = new XmlDataExtractor();
                 xmlDataExtractor.extract(fileContent.toString());
                 xmlFile = new XmlFile(xmlDataExtractor.getRootElement(), fileName, filePath, xmlDataExtractor.getAllElements(), xmlDataExtractor.getIdValidator());
             }

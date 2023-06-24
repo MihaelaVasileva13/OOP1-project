@@ -11,7 +11,6 @@ public class XmlElement {
     private final List<XmlElement> children;
     private String text;
     private String id;
-    private int depth;
 
     public XmlElement(String name) {
         this.name = name;
@@ -37,10 +36,6 @@ public class XmlElement {
         this.text = text;
     }
 
-    public void setDepth(int depth) {
-        this.depth = depth;
-    }
-
     public String getName() {
         return name;
     }
@@ -59,10 +54,6 @@ public class XmlElement {
 
     public String getId() {
         return id;
-    }
-
-    public int getDepth() {
-        return depth;
     }
 
     public String toString() {

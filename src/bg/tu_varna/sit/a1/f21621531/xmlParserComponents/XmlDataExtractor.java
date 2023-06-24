@@ -12,7 +12,6 @@ public class XmlDataExtractor {
     private AttributeExtractor attributeExtractor = new AttributeExtractor(null, null);
     private final Stack<XmlElement> elementStack = new Stack<>();
     private final ArrayList<XmlElement> allElements = new ArrayList<>();
-    private int currentDepth = 0;
 
     public void extract(String fileContent) throws XMLParserException {
         int i = 0, j = 0;
@@ -38,58 +37,53 @@ public class XmlDataExtractor {
                         }
 
                         if (!tagContent.contains("/")) {
+                            String[] tagContentElements = tagContent.split(" ");
+                            tagContent = tagContentElements[0];
+                            XmlElement currentElement;
+                            currentElement = new XmlElement(tagContent);
                             if (rootElement == null && !tagContent.contains("?")) {
-                                // Create root element and push it to the element and tag stacks
-                                rootElement = new XmlElement(tagContent);
-                                elementStack.push(rootElement);
-                                tagStack.push(tagContent);
-                            } else if (rootElement != null && !tagContent.contains(rootElement.getName())) {
-                                String[] tagContentElements = tagContent.split(" ");
-                                tagContent = tagContentElements[0];
-                                XmlElement currentElement;
-                                currentElement = new XmlElement(tagContent);
-
-                                // Process attributes of the current element
-                                if (tagContentElements.length >= 2) {
-                                    for (int k = 1; k < tagContentElements.length; k++) {
-                                        attributeExtractor = attributeExtractor.extractAttribute(tagContentElements[k]);
-                                        if (attributeExtractor.getName() != null && attributeExtractor.getValue() != null) {
-                                            if (attributeExtractor.getName().equals("id")) {
-                                                currentElement.addId(attributeExtractor.getValue().replaceAll("\"", ""));
-                                            } else {
-                                                currentElement.addAttribute(attributeExtractor.getName(), attributeExtractor.getValue());
-                                            }
-                                        }
-                                    }
-                                }
-
-                                // Check if there is text content within the current element
-                                if (j < fileContent.length() - 1 && fileContent.charAt(j + 1) != '<') {
-                                    int endIndex = fileContent.indexOf('<', j + 1);
-                                    if (endIndex != -1) {
-                                        String text = fileContent.substring(j + 1, endIndex).trim();
-                                        if (!text.isEmpty()) {
-                                            currentElement.addText(text);
-                                        }
-                                    }
-                                }
-
-                                if (!elementStack.empty()) {
-                                    // Get the parent element and validate the current element's ID
-                                    XmlElement parentElement = elementStack.peek();
-                                    currentElement = idValidator.validateId(currentElement);
-
-                                    // Add the current element to the parent element's children
-                                    parentElement.addChildElement(currentElement);
-                                    allElements.add(currentElement);
-                                }
-
-                                // Push the current element to the element and tag stacks
-                                elementStack.push(currentElement);
-                                currentDepth++;
-                                currentElement.setDepth(currentDepth);
-                                tagStack.push(tagContent);
+                                // Create root element
+                                rootElement = currentElement;
                             }
+
+                            // Process attributes of the current element
+                            if (tagContentElements.length >= 2) {
+                                for (int k = 1; k < tagContentElements.length; k++) {
+                                    attributeExtractor = attributeExtractor.extractAttribute(tagContentElements[k]);
+                                    if (attributeExtractor.getName() != null && attributeExtractor.getValue() != null) {
+                                        if (attributeExtractor.getName().equals("id")) {
+                                            currentElement.addId(attributeExtractor.getValue().replaceAll("\"", ""));
+                                        } else {
+                                            currentElement.addAttribute(attributeExtractor.getName(), attributeExtractor.getValue());
+                                        }
+                                    }
+                                }
+                            }
+
+                            // Check if there is text content within the current element
+                            if (j < fileContent.length() - 1 && fileContent.charAt(j + 1) != '<') {
+                                int endIndex = fileContent.indexOf('<', j + 1);
+                                if (endIndex != -1) {
+                                    String text = fileContent.substring(j + 1, endIndex).trim();
+                                    if (!text.isEmpty()) {
+                                        currentElement.addText(text);
+                                    }
+                                }
+                            }
+
+                            if (!elementStack.empty()) {
+                                // Get the parent element and validate the current element's ID
+                                XmlElement parentElement = elementStack.peek();
+                                currentElement = idValidator.validateId(currentElement);
+
+                                // Add the current element to the parent element's children
+                                parentElement.addChildElement(currentElement);
+                                allElements.add(currentElement);
+                            }
+
+                            // Push the current element to the element and tag stacks
+                            elementStack.push(currentElement);
+                            tagStack.push(tagContent);
                         } else {
                             if (!elementStack.isEmpty()) {
                                 if (!tagStack.isEmpty()) {
@@ -100,7 +94,6 @@ public class XmlDataExtractor {
                                     }
                                 }
                                 elementStack.pop();
-                                currentDepth--;
                             } else {
                                 throw new XMLParserException("Missing tag in file!");
                             }

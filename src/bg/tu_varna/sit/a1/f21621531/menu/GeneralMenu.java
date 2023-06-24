@@ -41,6 +41,10 @@ public class GeneralMenu implements Menu {
             throw new XMLParserException("Invalid command!");
         }
         Command cmd = commandRegistry.get(command[0]);
+        if (cmd instanceof Open && fileOpen)
+        {
+            throw new XMLParserException("File already opened!");
+        }
         if (cmd instanceof Open|| cmd instanceof Save || cmd instanceof SaveAs)
         {
             fileOpen=true;

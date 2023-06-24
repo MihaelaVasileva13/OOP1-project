@@ -84,9 +84,8 @@ public class XmlFile {
         if (!element.getChildren().isEmpty()) {
             content.append("\n");
             for (XmlElement child : element.getChildren()) {
-                content.append(childToText(child, child.getDepth()));
+                content.append(childToText(child, 1));
             }
-            content.append(getIndentation(element.getDepth()));
         }
         content.append("</").append(element.getName()).append(">");
         return content.toString();
