@@ -1,6 +1,7 @@
 package bg.tu_varna.sit.a1.f21621531.commonCommands;
 
 import bg.tu_varna.sit.a1.f21621531.xmlParser.XMLParserException;
+
 public class Help implements Command {
     @Override
     public String execute(String[] command) throws XMLParserException {
@@ -8,23 +9,24 @@ public class Help implements Command {
             throw new XMLParserException("Invalid arguments for command help!");
         }
         return """
-            The following commands are supported:
-            
-            open <file>            opens <file>
-            close                  closes currently opened file
-            save                   saves the currently open file
-            saveas <file>          saves the currently open file in <file>
-            help                   prints this information
-            exit                   exits the program
-            print                  prints the file content formatted
-            select <id> <key>      returns an attribute value by a given element id and attribute key
-            set <id> <key> <value> assigning a value to an attribute
-            children <id>          list of child element attributes
-            child <id> <n>         access the n-th descendant of an element
-            text <id>              access the text of an element
-            delete <id> <key>      delete element attribute by key
-            newchild <id> <name>   adding a new element successor (the new item does not have any attributes except id)
-            """;
+                The following commands are supported:
+                            
+                open <file>            opens <file>
+                close                  closes currently opened file
+                save                   saves the currently open file
+                saveas <file>          saves the currently open file in <file>
+                help                   prints this information
+                exit                   exits the program
+                print                  prints the file content formatted
+                select <id> <key>      returns an attribute value by a given element id and attribute key
+                set <id> <key> <value> assigning a value to an attribute
+                children <id>          list of child element attributes
+                child <id> <n>         access the n-th descendant of an element
+                text <id>              access the text of an element
+                delete <id> <key>      delete element attribute by key
+                newchild <id> <name>   adding a new element successor (the new item does not have any attributes except id)
+                xpath <XPath>          operations to perform simple XPath 2.0 queries that returns a list of XML elements
+                """;
     }
 }
 

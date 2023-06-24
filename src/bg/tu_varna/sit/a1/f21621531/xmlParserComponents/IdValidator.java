@@ -20,18 +20,16 @@ public class IdValidator {
                 xmlElement.addId("0");
             }
         }
-
         String id = xmlElement.getId().replaceAll("\"", "");
         if (idStorage.contains(id)) {
-            int flag = 1;
+            int numberInId = 1;
             String newId;
             do {
-                newId = id + "_" + flag;
-                flag++;
+                newId = id + "_" + numberInId;
+                numberInId++;
             } while (idStorage.contains(newId));
             xmlElement.addId(newId);
         }
-
         idStorage.add(xmlElement.getId());
         return xmlElement;
     }

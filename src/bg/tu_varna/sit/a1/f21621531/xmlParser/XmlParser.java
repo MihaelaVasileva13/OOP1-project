@@ -7,31 +7,30 @@ import java.util.Scanner;
 
 public class XmlParser {
     private static XmlParser instance;
-    public static XmlParser getInstance()
-    {
-        if (instance==null){
-            instance=new XmlParser();
+
+    public static XmlParser getInstance() {
+        if (instance == null) {
+            instance = new XmlParser();
         }
         return instance;
     }
+
     public void launch() {
-        Menu menu=new GeneralMenu();
-        Scanner scanner=new Scanner(System.in);
+        Menu menu = new GeneralMenu();
+        Scanner scanner = new Scanner(System.in);
         String input;
         String[] command;
-        while (true)
-        {
+        while (true) {
             System.out.print("> ");
-            input=scanner.nextLine();
-            if (input.equals("exit"))
-            {
+            input = scanner.nextLine();
+            if (input.equals("exit")) {
                 System.out.println("Exiting the program... ");
                 System.exit(0);
             }
-            command=input.split(" ");
+            command = input.split(" ");
             try {
                 menu.execute(command);
-            } catch (Exception e){
+            } catch (Exception e) {
                 System.out.println(e.getMessage());
                 System.out.println("Exiting the program... ");
                 System.exit(0);

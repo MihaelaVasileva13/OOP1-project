@@ -4,17 +4,17 @@ import bg.tu_varna.sit.a1.f21621531.xmlParser.XMLParserException;
 import bg.tu_varna.sit.a1.f21621531.xmlParser.XmlFile;
 import bg.tu_varna.sit.a1.f21621531.commonCommands.*;
 import bg.tu_varna.sit.a1.f21621531.xmlParserCommands.*;
-
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
 public class GeneralMenu implements Menu {
     private XmlFile xmlFile;
+    private boolean fileOpen=false;
     private final Map<String, Command> commandRegistry;
 
     public GeneralMenu() {
-        this.xmlFile = new XmlFile(null, null, null, false, null, null);
+        this.xmlFile = null;
         commandRegistry = new HashMap<>();
         commandRegistry.put("open", new Open());
         commandRegistry.put("save", new Save());
@@ -34,31 +34,24 @@ public class GeneralMenu implements Menu {
 
     @Override
     public void execute(String[] command) throws XMLParserException, IOException {
-        if (xmlFile.isFileOpen() && !command[0].equals("open")) {
+        if (!fileOpen && !command[0].equals("open")) {
             throw new XMLParserException("No file is currently open!");
         }
         if (!commandRegistry.containsKey(command[0])) {
             throw new XMLParserException("Invalid command!");
         }
         Command cmd = commandRegistry.get(command[0]);
+        if (cmd instanceof Open|| cmd instanceof Save || cmd instanceof SaveAs)
+        {
+            fileOpen=true;
+        }
+        if (cmd instanceof Close)
+        {
+            fileOpen=false;
+        }
         if (cmd instanceof XmlFileAwareCommand xmlFileAwareCmd) {
             xmlFileAwareCmd.setXmlFile(xmlFile);
-            if (xmlFileAwareCmd instanceof Open) {
-                System.out.println(xmlFileAwareCmd.execute(command));
-                Close closeCommand = new Close();
-                closeCommand.setXmlFile(xmlFileAwareCmd.getXmlFile());
-                System.out.println(closeCommand.execute(new String[]{"close"}));
-            } else if (xmlFileAwareCmd instanceof Save || xmlFileAwareCmd instanceof SaveAs) {
-                Open openCommand = new Open();
-                openCommand.setXmlFile(xmlFileAwareCmd.getXmlFile());
-                System.out.println(openCommand.execute(new String[]{"open", xmlFileAwareCmd.getXmlFile().getFilePath()}));
-                System.out.println(xmlFileAwareCmd.execute(command));
-                Close closeCommand = new Close();
-                closeCommand.setXmlFile(xmlFileAwareCmd.getXmlFile());
-                System.out.println(closeCommand.execute(new String[]{"close"}));
-            } else {
-                System.out.println(xmlFileAwareCmd.execute(command));
-            }
+            System.out.println(xmlFileAwareCmd.execute(command));
             xmlFile = xmlFileAwareCmd.getXmlFile();
         } else {
             System.out.println(cmd.execute(command));

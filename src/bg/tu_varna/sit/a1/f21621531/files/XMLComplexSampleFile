@@ -1,5 +1,5 @@
 <people>
-	<person id="0" age="45">
+	<person id="0" age="33">
 		<name id="0_1" title="Mr.">John Smith</name>
 		<address id="0_2" type="home">
 			<street id="2">123 Main Street</street>

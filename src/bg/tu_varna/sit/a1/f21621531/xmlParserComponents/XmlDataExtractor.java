@@ -2,12 +2,14 @@ package bg.tu_varna.sit.a1.f21621531.xmlParserComponents;
 
 import bg.tu_varna.sit.a1.f21621531.xmlParser.XMLParserException;
 import bg.tu_varna.sit.a1.f21621531.xmlStructure.XmlElement;
+
 import java.util.ArrayList;
 import java.util.Stack;
+
 public class XmlDataExtractor {
     private XmlElement rootElement = null;
-    private final IdValidator idValidator=new IdValidator();
-    private AttributeExtractor attributeExtractor = new AttributeExtractor(null,null);
+    private final IdValidator idValidator = new IdValidator();
+    private AttributeExtractor attributeExtractor = new AttributeExtractor(null, null);
     private final Stack<XmlElement> elementStack = new Stack<>();
     private final ArrayList<XmlElement> allElements = new ArrayList<>();
     private int currentDepth = 0;

@@ -12,6 +12,7 @@ public class XmlElement {
     private String text;
     private String id;
     private int depth;
+
     public XmlElement(String name) {
         this.name = name;
         this.attributes = new HashMap<>();
@@ -24,12 +25,14 @@ public class XmlElement {
     }
 
     public void addId(String value) {
-        id=value;
+        id = value;
         attributes.put("id", id);
     }
+
     public void addChildElement(XmlElement child) {
         children.add(child);
     }
+
     public void addText(String text) {
         this.text = text;
     }
@@ -61,20 +64,21 @@ public class XmlElement {
     public int getDepth() {
         return depth;
     }
+
     public String toString() {
-            StringBuilder sb = new StringBuilder();
-            sb.append("<").append(name);
-            for (String key : attributes.keySet()) {
-                sb.append(" ").append(key).append("=").append(attributes.get(key));
-            }
-            sb.append(">");
-            if (!text.isEmpty()) {
-                sb.append(text);
-            }
-            for (XmlElement child : children) {
-                sb.append(child.toString());
-            }
-            sb.append("</").append(name).append(">");
-            return sb.toString();
+        StringBuilder sb = new StringBuilder();
+        sb.append("<").append(name);
+        for (String key : attributes.keySet()) {
+            sb.append(" ").append(key).append("=").append(attributes.get(key));
         }
+        sb.append(">");
+        if (!text.isEmpty()) {
+            sb.append(text);
+        }
+        for (XmlElement child : children) {
+            sb.append(child.toString());
+        }
+        sb.append("</").append(name).append(">");
+        return sb.toString();
+    }
 }

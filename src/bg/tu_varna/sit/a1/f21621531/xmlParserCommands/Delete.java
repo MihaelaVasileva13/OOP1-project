@@ -7,17 +7,20 @@ import bg.tu_varna.sit.a1.f21621531.commonCommands.XmlFileAwareCommand;
 
 public class Delete implements XmlFileAwareCommand {
     private XmlFile xmlFile;
+
     @Override
     public void setXmlFile(XmlFile xmlFile) {
         this.xmlFile = xmlFile;
     }
+
     @Override
     public XmlFile getXmlFile() {
         return this.xmlFile;
     }
+
     @Override
     public String execute(String[] command) throws XMLParserException {
-        if (command.length != 3|| command[1].isEmpty()|| command[2].isEmpty()) {
+        if (command.length != 3 || command[1].isEmpty() || command[2].isEmpty()) {
             throw new XMLParserException("Invalid arguments for command delete <id> <key>!");
         }
         String id = command[1];
@@ -29,13 +32,11 @@ public class Delete implements XmlFileAwareCommand {
             throw new XMLParserException("No element found with the given id!");
         }
         if (element.getAttributes().containsKey(key)) {
-            if(!key.equals("id")) {
+            if (!key.equals("id")) {
                 element.getAttributes().remove(key);
                 result = "The attribute " + key + " of the element with id " + id + " removed.";
                 attributeFound = true;
-            }
-            else
-            {
+            } else {
                 throw new XMLParserException("The id can not be deleted!");
             }
         }
