@@ -69,10 +69,9 @@ public class XmlFile {
                     else element=child;
                 }
             }
-        }
-        if (!element.getText().equals(text))
-        {
-            element=null;
+            else {
+                element = null;
+            }
         }
         return element;
     }
