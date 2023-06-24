@@ -34,7 +34,7 @@ public class Delete implements XmlFileAwareCommand {
         if (element.getAttributes().containsKey(key)) {
             if (!key.equals("id")) {
                 element.getAttributes().remove(key);
-                result = "The attribute " + key + " of the element with id " + id + " removed.";
+                result = "The attribute " + key + " of the element with id " + id + " removed";
                 attributeFound = true;
             } else {
                 throw new XMLParserException("The id can not be deleted!");

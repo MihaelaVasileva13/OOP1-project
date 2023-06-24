@@ -44,6 +44,6 @@ public class Children implements XmlFileAwareCommand {
         if (attributeList.length() == 0) {
             throw new XMLParserException("The child elements of the element with id " + id + " do not have any attributes!");
         }
-        return "List of attributes of the child elements of the element with id " + id + ":\n " + attributeList;
+        return "List of attributes of the child elements of the element with id " + id + ":\n" + attributeList;
     }
 }
