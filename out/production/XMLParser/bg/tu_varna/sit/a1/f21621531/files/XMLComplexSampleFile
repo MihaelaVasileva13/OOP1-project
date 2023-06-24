@@ -1,0 +1,26 @@
+<people>
+	<person id="0" age="33">
+		<name id="0_1" title="Mr.">John Smith</name>
+		<address id="0_2" type="home">
+			<street id="2">123 Main Street</street>
+			<city id="2_1">New York</city>
+			<country id="3">USA</country>
+		</address>
+		<contact id="3_1">
+			<email id="6">johnsmith@example.com</email>
+			<phone id="6_1" type="mobile">089 999 9999</phone>
+		</contact>
+	</person>
+	<person id="1">
+		<name id="3_2" title="Mr.">Ivan Petrov</name>
+		<address id="1_1" type="work">
+			<street id="5">Aleko Konstantinov 6 Street</street>
+			<city id="11">Sofia</city>
+			<country id="8">Bulgaria</country>
+		</address>
+		<contact id="2_2">
+			<email id="14">ivanpetrov@example.com</email>
+			<phone id="7" type="home">088 888 8888</phone>
+		</contact>
+	</person>
+</people>
