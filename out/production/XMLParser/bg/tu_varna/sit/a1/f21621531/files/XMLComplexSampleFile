@@ -11,7 +11,7 @@
 			<phone id="6_1" type="mobile">089 999 9999</phone>
 		</contact>
 	</person>
-	<person id="1">
+	<person id="1" age="40">
 		<name id="3_2" title="Mr.">Ivan Petrov</name>
 		<address id="1_1" type="work">
 			<street id="5">Aleko Konstantinov 6 Street</street>
@@ -23,4 +23,16 @@
 			<phone id="7" type="home">088 888 8888</phone>
 		</contact>
 	</person>
+	<person id="1" age="25">
+    		<name id="3" title="Mrs.">Maria Petrova</name>
+    		<address id="1" type="work">
+    			<street id="5">Aleko Konstantinov 6 Street</street>
+    			<city id="11">Sofia</city>
+    			<country id="8">Bulgaria</country>
+    		</address>
+    		<contact id="2">
+    			<email id="1">mariapetrovav@example.com</email>
+    			<phone id="7" type="home">088 888 8889</phone>
+    		</contact>
+    	</person>
 </people>

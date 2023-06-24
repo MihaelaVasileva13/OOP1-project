@@ -60,7 +60,7 @@ public class XmlElement {
         StringBuilder sb = new StringBuilder();
         sb.append("<").append(name);
         for (String key : attributes.keySet()) {
-            sb.append(" ").append(key).append("=").append(attributes.get(key));
+            sb.append(" ").append(key).append("=").append("\"").append(attributes.get(key)).append("\"");
         }
         sb.append(">");
         if (!text.isEmpty()) {
