@@ -3,7 +3,7 @@
 		<name id="0_1">John Smith</name>
 		<address id="0_2">USA</address>
 	</person>
-	<person id="0_3">
+	<person id="0_3" age="60">
 		<name id="1">Ivan Petrov</name>
 		<address id="1_1">Bulgaria</address>
 	</person>
