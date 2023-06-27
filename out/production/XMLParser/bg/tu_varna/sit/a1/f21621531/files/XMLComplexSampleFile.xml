@@ -23,16 +23,28 @@
 			<phone id="7" type="home">088 888 8888</phone>
 		</contact>
 	</person>
-	<person id="1" age="25">
-    		<name id="3" title="Mrs.">Maria Petrova</name>
-    		<address id="1" type="work">
-    			<street id="5">Aleko Konstantinov 6 Street</street>
-    			<city id="11">Sofia</city>
-    			<country id="8">Bulgaria</country>
-    		</address>
-    		<contact id="2">
-    			<email id="1">mariapetrovav@example.com</email>
-    			<phone id="7" type="home">088 888 8889</phone>
-    		</contact>
-    	</person>
+	<person id="1_2" age="25">
+		<name id="3_3" title="Mrs.">Maria Petrova</name>
+		<address id="1_3" type="work">
+			<street id="5_1">Aleko Konstantinov 6 Street</street>
+			<city id="11_1">Sofia</city>
+			<country id="8_1">Bulgaria</country>
+		</address>
+		<contact id="2_3">
+			<email id="1_4">mariapetrova@example.com</email>
+			<phone id="7_1" type="home">088 888 8889</phone>
+		</contact>
+	</person>
+	<person id="1_5" age="29">
+		<name id="3_4" title="Mrs.">Ivana Ivanova</name>
+		<address id="2_4" type="work">
+			<street id="6_2">Hristo Botev 10 Street</street>
+			<city id="11_2">Sofia</city>
+			<country id="8_2">Bulgaria</country>
+		</address>
+		<contact id="2_5">
+			<email id="1_6">ivanaivanova@example.com</email>
+			<phone id="7_2" type="home">088 888 8810</phone>
+		</contact>
+	</person>
 </people>
