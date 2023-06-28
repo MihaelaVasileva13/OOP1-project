@@ -27,18 +27,28 @@ public class XPath implements XmlFileAwareCommand {
         }
         String xPath = command[1];
         StringBuilder list = new StringBuilder();
-        if (xPath.contains("/")) {
-            if (xPath.contains("[") && xPath.contains("]")) {
-                list = new StringBuilder(getChildElementByIndex(xPath, list));
+        if (xPath.contains("(") && xPath.contains(")")) {
+            if (xPath.contains("=") && xPath.contains("\"") && xPath.contains("/")) {
+                list = new StringBuilder(getChildElementsByText(xPath, list));
+            } else if (xPath.contains("@")) {
+                if (!xPath.contains("=") && !xPath.contains("\"") && !xPath.contains("/")) {
+                    list = new StringBuilder(getAllElementAttribute(xPath, list));
+                } else {
+                    throw new XMLParserException("Invalid XPath operation!");
+                }
             } else {
-                if (xPath.contains("=") && xPath.contains("(") && xPath.contains(")") && xPath.contains("\"") && xPath.contains("/")) {
-                    list = new StringBuilder(getChildElementsByText(xPath, list));
+                throw new XMLParserException("Invalid XPath operation!");
+            }
+        } else if (xPath.contains("/")) {
+            if (!xPath.contains("=") && !xPath.contains("\"") && !xPath.contains("@")) {
+                if (xPath.contains("[") && xPath.contains("]")) {
+                    list = new StringBuilder(getChildElementByIndex(xPath, list));
                 } else {
                     list = new StringBuilder(getAllChildElements(xPath, list));
                 }
+            } else {
+                throw new XMLParserException("Invalid XPath operation!");
             }
-        } else if (xPath.contains("@") && xPath.contains("(") && xPath.contains(")")) {
-            list = new StringBuilder(getAllElementAttribute(xPath, list));
         } else {
             throw new XMLParserException("Invalid XPath operation!");
         }
@@ -168,16 +178,15 @@ public class XPath implements XmlFileAwareCommand {
                         if (!element.getChildren().isEmpty()) {
                             for (XmlElement child : element.getChildren()) {
                                 if (child.toString().contains(text)) {
-                                    child=xmlFile.getElementByText(child,text);
-                                    if (child!=null&&child.getName().equals(childName)) {
+                                    child = xmlFile.getElementByText(child, text);
+                                    if (child != null && child.getName().equals(childName)) {
                                         for (XmlElement child1 : element.getChildren()) {
                                             if (child1.getName().equals(childName1)) {
                                                 elements.append("- ").append(child1).append("\n");
                                             }
                                         }
-                                    }
-                                    else {
-                                        throw new XMLParserException("There is not such "+childName+"!");
+                                    } else {
+                                        throw new XMLParserException("There is not such " + childName + "!");
                                     }
                                 }
                             }
